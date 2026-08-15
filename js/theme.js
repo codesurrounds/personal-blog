@@ -7,7 +7,7 @@
 (function () {
   "use strict";
 
-  var THEMES = ["aurora", "midnight", "sepia", "forest", "paper", "mono"];
+  var THEMES = ["aurora", "neptune-night"];
 
   function safeTheme(name) {
     return THEMES.indexOf(name) >= 0 ? name : "aurora";

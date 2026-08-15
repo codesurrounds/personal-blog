@@ -141,16 +141,12 @@ p.x += Math.sin(p.z + t) * 0.3;
 编辑 `js/config.js` 的 `window.SITE`：站点名 `name`、英文名 `enName`、标语 `tagline`、博主 `author`（姓名/头像/简介/技能/链接/时间线）。
 
 ### 切换整套配色（主题）
-内置 6 套配色主题，**改一个字段即可整站切换，背景粒子也会自动跟随变色**：
+内置 2 套「星球」配色主题，对应**白天 / 夜晚**，**改一个字段即可整站切换，背景粒子也会自动跟随变色**：
 
-| `SITE.theme` | 风格 | 说明 |
-| --- | --- | --- |
-| `aurora` | 深墨 + 青紫（**默认**） | 已专门提升文字对比度，卡片有更实的衬底 |
-| `midnight` | 深蓝 + 天蓝/靛 | 更柔和，长时间阅读不刺眼 |
-| `sepia` | 暖棕 + 琥珀/珊瑚 | 夜间最护眼 |
-| `forest` | 深绿 + 翠绿 | 自然、安静 |
-| `paper` | **浅色**白底深字 | 可读性最强，适合明亮环境 |
-| `mono` | 灰度极简 | 去掉一切色彩干扰 |
+| `SITE.theme` | 星球 | 风格 | 适用 |
+| --- | --- | --- | --- |
+| `aurora` | 最初配色 | 深墨 + 青紫，博客初始外观 | 白天 08–20 点 |
+| `neptune-night` | 海王星（夜） | 深靛幽蓝，沉静 | 夜晚 20–次日08 点 |
 
 切换方法有两种：
 
@@ -159,7 +155,7 @@ p.x += Math.sin(p.z + t) * 0.3;
 ```js
 window.SITE = {
   autoTheme: "fixed",
-  theme: "aurora",   // ← 改成 midnight / sepia / forest / paper / mono
+  theme: "aurora",   // ← 改成 neptune-night（其余时间同理）
   // ...
 };
 ```
@@ -168,19 +164,17 @@ window.SITE = {
 
 | 时段 | 主题 | 意图 |
 | --- | --- | --- |
-| 05:00–11:00 | `paper`（浅色） | 清晨迎晨光，亮色不刺眼 |
-| 11:00–17:00 | `aurora`（深墨青紫） | 上午到午后默认深色 |
-| 17:00–21:00 | `sepia`（暖棕） | 傍晚暖色护眼 |
-| 21:00–次日05:00 | `midnight`（深蓝） | 深夜静谧 |
+| 00:00–08:00 | `neptune-night`（海王星夜） | 凌晨至清晨，深靛护眼 |
+| 08:00–20:00 | `aurora`（最初配色） | 深墨青紫，恢复初始外观 |
+| 20:00–24:00 | `neptune-night`（海王星夜） | 入夜至深夜，深蓝静谧 |
 
 ```js
 window.SITE = {
   autoTheme: "time",          // "time" 按时段自动切换 | "fixed" 固定 theme
-  themeSchedule: [            // 24 小时制，左闭右开；to>24 表示跨午夜
-    { from: 5,  to: 11, theme: "paper"   },
-    { from: 11, to: 17, theme: "aurora"  },
-    { from: 17, to: 21, theme: "sepia"   },
-    { from: 21, to: 29, theme: "midnight" }
+  themeSchedule: [            // 24 小时制，左闭右开；getHours 为 0–23，故直接铺满 0–24
+    { from: 0,  to: 8,  theme: "neptune-night" },
+    { from: 8,  to: 20, theme: "aurora"        },
+    { from: 20, to: 24, theme: "neptune-night" }
   ],
   // ...
 };

@@ -117,18 +117,20 @@
     return (
       '<article class="post reveal">' +
         '<a class="post__back" href="#/">← 返回列表</a>' +
-        '<h1 class="post__title">' + esc(p.title) + "</h1>" +
-        '<div class="post__meta">' +
-          "<span>" + esc(p.date) + "</span>" +
-          '<span class="dot"></span>' +
-          "<span>" + readingTime(p.markdown) + " 分钟阅读</span>" +
-          '<span class="dot"></span>' +
-          '<span class="chips">' + tags + "</span>" +
-        "</div>" +
-        '<div class="markdown">' + html + "</div>" +
-        '<div class="post__footer">' +
-          '<div class="label">标签</div>' +
-          '<div class="chips">' + tags + "</div>" +
+        '<div class="post__surface">' +
+          '<h1 class="post__title">' + esc(p.title) + "</h1>" +
+          '<div class="post__meta">' +
+            "<span>" + esc(p.date) + "</span>" +
+            '<span class="dot"></span>' +
+            "<span>" + readingTime(p.markdown) + " 分钟阅读</span>" +
+            '<span class="dot"></span>' +
+            '<span class="chips">' + tags + "</span>" +
+          "</div>" +
+          '<div class="markdown">' + html + "</div>" +
+          '<div class="post__footer">' +
+            '<div class="label">标签</div>' +
+            '<div class="chips">' + tags + "</div>" +
+          "</div>" +
         "</div>" +
       "</article>"
     );

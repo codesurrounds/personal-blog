@@ -9,26 +9,22 @@ window.SITE = {
    *  两套机制，由 autoTheme 选择其一：
    *    autoTheme: "fixed" → 使用下面的 theme 固定主题
    *    autoTheme: "time"  → 按当前时段自动切换（见 themeSchedule）
-   *  可选主题：aurora | midnight | sepia | forest | paper(浅色) | mono
-   *    aurora   深墨 + 青紫（默认） 已专门提升文字对比度
-   *    midnight 深蓝 + 天蓝/靛 更柔和、久读不刺眼
-   *    sepia    暖棕 + 琥珀/珊瑚 夜间最护眼
-   *    forest   深绿 + 翠绿 自然安静
-   *    paper    浅色白底深字 可读性最强，明亮环境首选
-   *    mono     灰度极简 去掉色彩干扰
+   *  两套配色，对应白天 / 夜晚：
+   *    aurora        白天 · 深墨 + 青紫（恢复博客最初配色）
+   *    neptune-night  夜晚 · 海王星夜 · 深靛幽蓝（深色护眼）
+   *  白天/夜晚时段见 themeSchedule（默认 08–20 白天 aurora，其余夜晚）。
    * ============================================================ */
-  theme: "midnight",          // autoTheme="fixed" 时使用的固定主题
+  theme: "aurora",            // autoTheme="fixed" 时使用的固定主题（默认取最初 aurora）
 
   autoTheme: "time",          // "time" 按时段自动切换（推荐）| "fixed" 固定 theme
 
-  // 按时段自动切换的映射（24 小时制，左闭右开；to 可大于 24 表示跨午夜）。
-  // 按当前小时落入的区间匹配；全部未命中时回退到上面的 theme。
+  // 按时段自动切换的映射（24 小时制，左闭右开；getHours 返回 0–23，故直接铺满 0–24）。
+  // 白天 08–20 用 aurora（深墨青紫，博客最初配色），其余时间用海王星夜（深靛护眼）。
   // 想调整：改 from/to 划分时段，或改 theme 指定该时段的配色即可。
   themeSchedule: [
-    { from: 5,  to: 11, theme: "paper"   }, // 清晨 05–11：浅色亮眼，迎晨光
-    { from: 11, to: 17, theme: "aurora"  }, // 上午–午后 11–17：默认深色
-    { from: 17, to: 21, theme: "sepia"   }, // 傍晚 17–21：暖色护眼
-    { from: 21, to: 29, theme: "midnight" } // 深夜 21–次日5：深蓝静谧
+    { from: 0,  to: 8,  theme: "neptune-night" }, // 00–08 凌晨至清晨：海王星夜
+    { from: 8,  to: 20, theme: "aurora"        }, // 08–20 白天：aurora（最初配色）
+    { from: 20, to: 24, theme: "neptune-night" }  // 20–24 入夜至深夜：海王星夜
   ],
 
   name: "微光",

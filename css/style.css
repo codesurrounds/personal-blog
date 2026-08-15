@@ -4,28 +4,31 @@
  * ============================================================ */
 
 :root {
-  /* ===== 颜色（默认主题 = aurora，可在 js/config.js 用 SITE.theme 切换） ===== */
+  /* ===== 颜色（默认主题 = 白天 aurora · 恢复最初配色，可在 js/config.js 用 SITE.theme 切换） ===== */
   --bg: #0A0C16;
   --bg-soft: #10142a;
-  --surface: rgba(255, 255, 255, 0.08);
+  --surface: rgba(255, 255, 255, 0.11);
   --surface-2: rgba(255, 255, 255, 0.12);
+  --surface-search: rgba(10, 12, 22, 0.30);   /* 搜索栏：柔和凹陷玻璃，融入页面 */
+  --surface-chip: rgba(255, 255, 255, 0.14);  /* 标签 chip：轻玻璃，清晰可读 */
+  --surface-post: rgba(12, 14, 28, 0.42);     /* 文章面板：半实底，保证正文清晰 */
   --border: rgba(255, 255, 255, 0.12);
   --border-strong: rgba(255, 255, 255, 0.22);
   --text: #ECEEF6;          /* 正文：高对比近白 */
-  --muted: #9AA1B8;         /* 次要文字：提亮，保证可读 */
+  --muted: #C6CCDD;         /* 次要文字：提亮两档，摘要/标签更清晰 */
   --accent1: #5EEAD4;       /* 青 */
   --accent2: #A78BFA;       /* 紫 */
   --grad: linear-gradient(120deg, var(--accent1), var(--accent2));
   --danger: #FB7185;
 
   /* 背景特效 / 光晕用的 RGB 三元组（CSS 与 canvas 共用） */
-  --aurora-a: 94,234,212;        /* ≈ accent1 */
-  --aurora-b: 167,139,250;       /* ≈ accent2 */
-  --veil-bottom-rgb: 10,12,22;   /* 页面底色（导航 / 底部遮罩） */
-  --canvas-bg: 10,12,22;         /* canvas 拖尾底色 */
-  --particle-near: #E2F7FF;      /* 近处粒子 */
-  --particle-far: #97A8CE;       /* 远处粒子 */
-  --glow: 94,234,212;            /* 鼠标光晕 */
+  --aurora-a: 94,234,212;      /* ≈ accent1 */
+  --aurora-b: 167,139,250;     /* ≈ accent2 */
+  --veil-bottom-rgb: 10,12,22;  /* 页面底色（导航 / 底部遮罩） */
+  --canvas-bg: 10,12,22;        /* canvas 拖尾底色 */
+  --particle-near: #E2F7FF;     /* 近处粒子 */
+  --particle-far: #97A8CE;      /* 远处粒子 */
+  --glow: 94,234,212;          /* 鼠标光晕 */
 
   /* ===== 排版 ===== */
   --font-display: "Sora", "Space Grotesk", system-ui, -apple-system, sans-serif;
@@ -44,6 +47,7 @@
 /* 主题切换平滑过渡（仅在未要求减少动效时，避免眩晕） */
 @media (prefers-reduced-motion: no-preference) {
   body, .nav, .nav.scrolled, .card, .chip, .btn, .search, .panel,
+  .post__surface,
   .tagcloud, .archive__group, .about__card, .timeline__item,
   .markdown blockquote, .markdown code, .markdown pre, .bg-veil {
     transition: background-color .6s ease, color .6s ease,
@@ -52,119 +56,36 @@
 }
 
 /* ============================================================
- *  主题切换：在 js/config.js 把 SITE.theme 改成下列任一值即可。
- *  每套主题完整覆盖颜色令牌，背景粒子也会自动跟随变色。
- *    aurora   （默认）深墨 + 青紫，已提升文字对比度
- *    midnight 深蓝 + 天蓝/靛，更柔和、长时间阅读不刺眼
- *    sepia    暖棕 + 琥珀/珊瑚，夜间最护眼
- *    forest   深绿 + 翠绿，自然安静
- *    paper    浅色主题，白底深字，可读性最强
- *    mono     灰度极简，去掉一切色彩干扰
+ *  主题切换：在 js/config.js 把 SITE.theme 改成下列值即可。
+ *  共 2 套配色，对应白天 / 夜晚，背景粒子自动跟随变色：
+ *    aurora        白天 · 深墨 + 青紫（博客最初配色）
+ *    neptune-night  夜晚 · 海王星夜 · 深靛幽蓝（深色护眼）
+ *  白天/夜晚由 js/config.js 的 themeSchedule 自动按时段切换。
+ *  白天(aurora) 即下方 :root 默认令牌；此处仅声明夜晚(neptune-night)。
  * ============================================================ */
 
-[data-theme="midnight"] {
-  --bg: #060A18;
-  --bg-soft: #0C1226;
-  --surface: rgba(255, 255, 255, 0.07);
-  --surface-2: rgba(255, 255, 255, 0.11);
-  --border: rgba(255, 255, 255, 0.12);
-  --border-strong: rgba(255, 255, 255, 0.20);
-  --text: #E9EDF8;
-  --muted: #99A2C0;
-  --accent1: #7CC4FF;
-  --accent2: #9A8BFF;
-  --danger: #FF8BA0;
-  --aurora-a: 124,196,255;
-  --aurora-b: 154,139,255;
-  --veil-bottom-rgb: 6,10,24;
-  --canvas-bg: 6,10,24;
-  --particle-near: #DCEBFF;
-  --particle-far: #8FA0C8;
-  --glow: 124,196,255;
-}
-
-[data-theme="sepia"] {
-  --bg: #17110C;
-  --bg-soft: #221913;
-  --surface: rgba(255, 240, 222, 0.07);
-  --surface-2: rgba(255, 240, 222, 0.11);
-  --border: rgba(255, 235, 210, 0.14);
-  --border-strong: rgba(255, 235, 210, 0.24);
-  --text: #F3EADA;
-  --muted: #BBA892;
-  --accent1: #F0B36A;
-  --accent2: #E58C7C;
-  --danger: #F08A92;
-  --aurora-a: 240,179,106;
-  --aurora-b: 229,140,124;
-  --veil-bottom-rgb: 23,17,12;
-  --canvas-bg: 23,17,12;
-  --particle-near: #FBEAD2;
-  --particle-far: #B9A98F;
-  --glow: 240,179,106;
-}
-
-[data-theme="forest"] {
-  --bg: #06140F;
-  --bg-soft: #0B2018;
-  --surface: rgba(255, 255, 255, 0.07);
-  --surface-2: rgba(255, 255, 255, 0.11);
-  --border: rgba(255, 255, 255, 0.12);
-  --border-strong: rgba(255, 255, 255, 0.20);
-  --text: #E6F2E9;
-  --muted: #9DBBAE;
-  --accent1: #5FE3B0;
-  --accent2: #8FD9C4;
-  --danger: #F2889B;
-  --aurora-a: 95,227,176;
-  --aurora-b: 143,217,196;
-  --veil-bottom-rgb: 6,20,15;
-  --canvas-bg: 6,20,15;
-  --particle-near: #DAF7EC;
-  --particle-far: #8FB6A6;
-  --glow: 95,227,176;
-}
-
-[data-theme="paper"] {
-  --bg: #F4F6FB;
-  --bg-soft: #E9EDF5;
-  --surface: rgba(255, 255, 255, 0.74);
-  --surface-2: rgba(255, 255, 255, 0.94);
-  --border: rgba(15, 23, 42, 0.12);
-  --border-strong: rgba(15, 23, 42, 0.22);
-  --text: #1B2230;
-  --muted: #56607A;
-  --accent1: #0D9488;
-  --accent2: #7C3AED;
-  --danger: #E11D48;
-  --aurora-a: 13,148,136;
-  --aurora-b: 124,58,237;
-  --veil-bottom-rgb: 244,246,251;
-  --canvas-bg: 244,246,251;
-  --particle-near: #2A3550;
-  --particle-far: #AEB8CC;
-  --glow: 13,148,136;
-}
-
-[data-theme="mono"] {
-  --bg: #0D0E12;
-  --bg-soft: #15161B;
-  --surface: rgba(255, 255, 255, 0.06);
-  --surface-2: rgba(255, 255, 255, 0.10);
-  --border: rgba(255, 255, 255, 0.12);
-  --border-strong: rgba(255, 255, 255, 0.22);
-  --text: #EDEEF2;
-  --muted: #9A9CA6;
-  --accent1: #C7CCD6;
-  --accent2: #9AA0AE;
-  --danger: #E08A98;
-  --aurora-a: 199,204,214;
-  --aurora-b: 154,160,174;
-  --veil-bottom-rgb: 13,14,18;
-  --canvas-bg: 13,14,18;
-  --particle-near: #EDF0F5;
-  --particle-far: #98A0B2;
-  --glow: 199,204,214;
+[data-theme="neptune-night"] {
+  --bg: #040B16;
+  --bg-soft: #081320;
+  --surface: rgba(190, 215, 250, 0.10);
+  --surface-2: rgba(190, 215, 250, 0.10);
+  --surface-search: rgba(6, 14, 26, 0.32);
+  --surface-chip: rgba(190, 215, 250, 0.12);
+  --surface-post: rgba(8, 18, 30, 0.46);
+  --border: rgba(150, 190, 240, 0.12);
+  --border-strong: rgba(150, 190, 240, 0.22);
+  --text: #DCE8F6;
+  --muted: #96A8CC;         /* 次要文字：提亮一档 */
+  --accent1: #4E8FD6;
+  --accent2: #6A6AD0;
+  --danger: #C8799A;
+  --aurora-a: 78,143,214;
+  --aurora-b: 106,106,208;
+  --veil-bottom-rgb: 6,14,26;
+  --canvas-bg: 6,14,26;
+  --particle-near: #C6DEF7;
+  --particle-far: #7890B0;
+  --glow: 78,143,214;
 }
 
 /* ---------- 基础 ---------- */
@@ -501,7 +422,9 @@ img { max-width: 100%; display: block; }
   font-size: .8rem;
   border-radius: 999px;
   border: 1px solid var(--border);
-  background: var(--surface);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0)),
+    var(--surface-chip);
   color: var(--muted);
   transition: color .25s, border-color .25s, background .25s;
   cursor: pointer;
@@ -521,7 +444,7 @@ img { max-width: 100%; display: block; }
 
 /* ---------- 详情页 ---------- */
 .post {
-  width: min(100% - 28px, 760px);
+  width: min(100% - 28px, 900px);
   margin: calc(var(--nav-h) + 40px) auto 60px;
 }
 .post__back {
@@ -534,6 +457,16 @@ img { max-width: 100%; display: block; }
   transition: color .25s, gap .25s;
 }
 .post__back:hover { color: var(--accent1); gap: 10px; }
+.post__surface {
+  padding: clamp(22px, 5vw, 44px);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0)),
+    var(--surface-post);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 24px 70px -34px rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(6px);
+}
 .post__title {
   font-family: var(--font-display);
   font-size: clamp(2rem, 6vw, 3.2rem);
@@ -650,10 +583,13 @@ img { max-width: 100%; display: block; }
   gap: 12px;
   margin: 0 0 20px;
   padding: 12px 18px;
-  background: var(--surface);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0)),
+    var(--surface-search);
   border: 1px solid var(--border);
   border-radius: 999px;
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
   transition: border-color .3s, box-shadow .3s;
 }
 .search:focus-within {
