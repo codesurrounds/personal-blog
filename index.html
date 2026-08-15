@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>微光 · Glimmer</title>
+  <meta name="description" content="一个支持 Markdown、带 3D 空间与沉浸叙事氛围的个人博客。" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="vendor/highlight.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
+  <div class="bg-veil" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a class="nav__brand" href="#/" data-link>微光<span class="nav__brand-sep">·</span><em>Glimmer</em></a>
+    <button class="nav__toggle" id="navToggle" aria-label="打开菜单" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav__links" id="navLinks" aria-label="主导航">
+      <a href="#/" data-link>首页</a>
+      <a href="#/archive" data-link>归档</a>
+      <a href="#/tags" data-link>标签</a>
+      <a href="#/about" data-link>关于</a>
+    </nav>
+  </header>
+
+  <div class="progress" id="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+  <main id="app" class="app"></main>
+
+  <footer class="footer">
+    <p>© <span id="year"></span> 微光 · Glimmer — 用 <span class="grad">Markdown</span> 书写，于星空间生长。</p>
+  </footer>
+
+  <script src="vendor/marked.min.js"></script>
+  <script src="vendor/highlight.min.js"></script>
+  <script src="js/markdown.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/posts.js"></script>
+  <script src="js/loader.js"></script>
+  <script src="js/effects.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
