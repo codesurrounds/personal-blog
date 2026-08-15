@@ -41,6 +41,16 @@
   --nav-h: 64px;
 }
 
+/* 主题切换平滑过渡（仅在未要求减少动效时，避免眩晕） */
+@media (prefers-reduced-motion: no-preference) {
+  body, .nav, .nav.scrolled, .card, .chip, .btn, .search, .panel,
+  .tagcloud, .archive__group, .about__card, .timeline__item,
+  .markdown blockquote, .markdown code, .markdown pre, .bg-veil {
+    transition: background-color .6s ease, color .6s ease,
+                border-color .6s ease, box-shadow .6s ease;
+  }
+}
+
 /* ============================================================
  *  主题切换：在 js/config.js 把 SITE.theme 改成下列任一值即可。
  *  每套主题完整覆盖颜色令牌，背景粒子也会自动跟随变色。

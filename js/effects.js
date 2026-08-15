@@ -214,9 +214,12 @@
     if (reduceMotion) drawStatic();
   });
 
-  // 主题切换（如未来做实时切换 UI）时刷新粒子配色
+  // 主题切换时刷新粒子与极光配色（时段自动切换也走这里）
   window.addEventListener("glimmer:themechange", function () {
     readColors();
+    for (var a = 0; a < auroras.length; a++) {
+      auroras[a].c = (a === 1) ? COL.auroraB : COL.auroraA;
+    }
     if (reduceMotion) drawStatic();
   });
 

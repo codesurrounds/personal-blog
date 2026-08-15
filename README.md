@@ -152,16 +152,42 @@ p.x += Math.sin(p.z + t) * 0.3;
 | `paper` | **浅色**白底深字 | 可读性最强，适合明亮环境 |
 | `mono` | 灰度极简 | 去掉一切色彩干扰 |
 
-切换方法：编辑 `js/config.js` 把 `theme` 改成上表任一值，保存后刷新页面（`node serve.js` 访问时直接刷新即生效）。
+切换方法有两种：
+
+**① 固定主题**：编辑 `js/config.js`，把 `autoTheme` 设为 `"fixed"`，再把 `theme` 改成上表任一值。
 
 ```js
 window.SITE = {
+  autoTheme: "fixed",
   theme: "aurora",   // ← 改成 midnight / sepia / forest / paper / mono
   // ...
 };
 ```
 
-> 首屏主题由 `index.html` 的 `<head>` 内联脚本提前应用，避免刷新时配色闪烁（FOUC）。
+**② 随一天时段自动切换（默认开启）**：`autoTheme: "time"` 时，主题按当前小时在 `themeSchedule` 里自动选择，并每分钟检查一次、跨时段时平滑过渡：
+
+| 时段 | 主题 | 意图 |
+| --- | --- | --- |
+| 05:00–11:00 | `paper`（浅色） | 清晨迎晨光，亮色不刺眼 |
+| 11:00–17:00 | `aurora`（深墨青紫） | 上午到午后默认深色 |
+| 17:00–21:00 | `sepia`（暖棕） | 傍晚暖色护眼 |
+| 21:00–次日05:00 | `midnight`（深蓝） | 深夜静谧 |
+
+```js
+window.SITE = {
+  autoTheme: "time",          // "time" 按时段自动切换 | "fixed" 固定 theme
+  themeSchedule: [            // 24 小时制，左闭右开；to>24 表示跨午夜
+    { from: 5,  to: 11, theme: "paper"   },
+    { from: 11, to: 17, theme: "aurora"  },
+    { from: 17, to: 21, theme: "sepia"   },
+    { from: 21, to: 29, theme: "midnight" }
+  ],
+  // ...
+};
+```
+
+> 想自定义时段或配色：直接改 `themeSchedule` 里的 `from`/`to` 划分时段，或改每项的 `theme`。
+> 首屏主题由 `index.html` 的 `<head>` 内联脚本根据当前时段提前应用，避免刷新时配色闪烁（FOUC）。
 
 ### 自定义配色
 所有颜色都是 `css/style.css` 顶部的设计令牌。想微调某套主题，直接改对应 `[data-theme="..."]` 块里的令牌即可；想加新主题，复制一个 `[data-theme="yourname"]` 块、填上令牌，再把 `js/config.js` 的 `theme` 指向它：
