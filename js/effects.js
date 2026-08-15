@@ -14,6 +14,23 @@
   var reduceMotion = window.matchMedia &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  /* 配色跟随主题：从 CSS 变量读取（切换 data-theme 即自动变色） */
+  function cssVar(name, fallback) {
+    var v = getComputedStyle(document.documentElement).getPropertyValue(name);
+    v = (v || "").trim();
+    return v || fallback;
+  }
+  var COL = {};
+  function readColors() {
+    COL.canvasBg = cssVar("--canvas-bg", "10,12,22");
+    COL.near = cssVar("--particle-near", "#dff7ff");
+    COL.far = cssVar("--particle-far", "#9fb4d8");
+    COL.auroraA = cssVar("--aurora-a", "94,234,212");
+    COL.auroraB = cssVar("--aurora-b", "167,139,250");
+    COL.glow = cssVar("--glow", "94,234,212");
+  }
+  readColors();
+
   var dpr = Math.min(window.devicePixelRatio || 1, 2);
   var W = 0, H = 0;
   var particles = [];
@@ -43,9 +60,9 @@
     for (var i = 0; i < count; i++) particles.push(newParticle());
     var big = Math.max(W, H);
     auroras = [
-      { bx: 0.25, by: 0.30, r: big * 0.55, c: "94,234,212",  ph: 0.0, sp: 0.00030, amp: 0.06 },
-      { bx: 0.78, by: 0.22, r: big * 0.60, c: "167,139,250", ph: 2.1, sp: 0.00040, amp: 0.05 },
-      { bx: 0.55, by: 0.72, r: big * 0.48, c: "94,234,212",  ph: 4.2, sp: 0.00025, amp: 0.07 }
+      { bx: 0.25, by: 0.30, r: big * 0.55, c: COL.auroraA, ph: 0.0, sp: 0.00030, amp: 0.06 },
+      { bx: 0.78, by: 0.22, r: big * 0.60, c: COL.auroraB, ph: 2.1, sp: 0.00040, amp: 0.05 },
+      { bx: 0.55, by: 0.72, r: big * 0.48, c: COL.auroraA, ph: 4.2, sp: 0.00025, amp: 0.07 }
     ];
   }
 
@@ -57,13 +74,14 @@
     canvas.style.width = W + "px";
     canvas.style.height = H + "px";
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    readColors();
     initScene();
   }
 
   /* 一帧渲染。t 为时间(ms)。静态模式也复用此方法。 */
   function frame(t) {
-    // 轻微拖尾，营造流体感
-    ctx.fillStyle = "rgba(11,14,26,0.28)";
+    // 轻微拖尾，营造流体感（底色随主题变化）
+    ctx.fillStyle = "rgba(" + COL.canvasBg + ",0.28)";
     ctx.fillRect(0, 0, W, H);
 
     // ---- 极光团（中层，视差缓漂）----
@@ -119,7 +137,7 @@
       var alpha = (0.18 + p.z * 0.7) * (0.7 + 0.3 * Math.sin(p.tw));
 
       ctx.globalAlpha = alpha;
-      ctx.fillStyle = p.z > 0.6 ? "#dff7ff" : "#9fb4d8";
+      ctx.fillStyle = p.z > 0.6 ? COL.near : COL.far;
       ctx.beginPath();
       ctx.arc(p.x, drawY, r, 0, Math.PI * 2);
       ctx.fill();
@@ -128,8 +146,8 @@
     // ---- 鼠标光晕 ----
     if (mouse.active) {
       var gg = ctx.createRadialGradient(mouse.sx, mouse.sy, 0, mouse.sx, mouse.sy, 130);
-      gg.addColorStop(0, "rgba(94,234,212,0.16)");
-      gg.addColorStop(1, "rgba(94,234,212,0)");
+      gg.addColorStop(0, "rgba(" + COL.glow + ",0.16)");
+      gg.addColorStop(1, "rgba(" + COL.glow + ",0)");
       ctx.fillStyle = gg;
       ctx.beginPath();
       ctx.arc(mouse.sx, mouse.sy, 130, 0, Math.PI * 2);
@@ -160,7 +178,7 @@
       var p = particles[i];
       var r = 0.5 + p.z * 2.0;
       ctx.globalAlpha = 0.18 + p.z * 0.6;
-      ctx.fillStyle = p.z > 0.6 ? "#dff7ff" : "#9fb4d8";
+      ctx.fillStyle = p.z > 0.6 ? COL.near : COL.far;
       ctx.beginPath();
       ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
       ctx.fill();
@@ -193,6 +211,12 @@
 
   window.addEventListener("resize", function () {
     resize();
+    if (reduceMotion) drawStatic();
+  });
+
+  // 主题切换（如未来做实时切换 UI）时刷新粒子配色
+  window.addEventListener("glimmer:themechange", function () {
+    readColors();
     if (reduceMotion) drawStatic();
   });
 

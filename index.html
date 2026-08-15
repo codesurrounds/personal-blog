@@ -11,6 +11,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="vendor/highlight.min.css" />
   <link rel="stylesheet" href="css/style.css" />
+  <!-- 提前设置主题，避免首屏闪烁(FOUC) -->
+  <script src="js/config.js"></script>
+  <script>
+    (function () {
+      var t = (window.SITE && window.SITE.theme) || "aurora";
+      document.documentElement.setAttribute("data-theme", t);
+    })();
+  </script>
 </head>
 <body>
   <canvas id="bg-canvas" aria-hidden="true"></canvas>
@@ -40,7 +48,6 @@
   <script src="vendor/marked.min.js"></script>
   <script src="vendor/highlight.min.js"></script>
   <script src="js/markdown.js"></script>
-  <script src="js/config.js"></script>
   <script src="js/posts.js"></script>
   <script src="js/loader.js"></script>
   <script src="js/effects.js"></script>

@@ -4,6 +4,11 @@
  * ============================================================ */
 
 window.SITE = {
+  /* 配色主题：改这一行即可切换整套配色（背景粒子也会跟随变色）。
+     可选值：aurora(默认) | midnight | sepia | forest | paper(浅色) | mono
+     修改后刷新页面（node serve.js 访问时直接刷新即生效）。 */
+  theme: "aurora",
+
   name: "微光",
   enName: "Glimmer",
   tagline: "在星空间，慢慢写一点东西。",
